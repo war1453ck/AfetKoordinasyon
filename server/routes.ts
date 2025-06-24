@@ -385,6 +385,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mobile Users Routes
+  app.get("/api/mobile-users", async (req, res) => {
+    try {
+      const users = await storage.getAllMobileUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch mobile users" });
+    }
+  });
+
+  app.get("/api/user-locations", async (req, res) => {
+    try {
+      const locations = await storage.getAllUserLocations();
+      res.json(locations);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user locations" });
+    }
+  });
+
+  app.get("/api/user-locations/emergency", async (req, res) => {
+    try {
+      const locations = await storage.getEmergencyLocations();
+      res.json(locations);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch emergency locations" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

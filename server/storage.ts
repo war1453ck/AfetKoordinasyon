@@ -1,9 +1,11 @@
 import { 
   users, incidents, resources, teams, suppliers, earthquakes, weatherData, containers, cityManagement,
+  mobileUsers, emergencyAlerts, userLocations,
   type User, type InsertUser, type Incident, type InsertIncident, type Resource, type InsertResource, 
   type Team, type InsertTeam, type Supplier, type InsertSupplier, type Earthquake, type InsertEarthquake,
   type WeatherData, type InsertWeatherData, type Container, type InsertContainer, 
-  type CityManagement, type InsertCityManagement 
+  type CityManagement, type InsertCityManagement, type MobileUser, type InsertMobileUser,
+  type EmergencyAlert, type InsertEmergencyAlert, type UserLocation, type InsertUserLocation
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -68,6 +70,32 @@ export interface IStorage {
   createCityManagement(city: InsertCityManagement): Promise<CityManagement>;
   updateCityManagement(id: number, city: Partial<CityManagement>): Promise<CityManagement | undefined>;
   getCityByDistrict(district: string): Promise<CityManagement | undefined>;
+
+  // Mobile Users
+  getAllMobileUsers(): Promise<MobileUser[]>;
+  getMobileUser(id: number): Promise<MobileUser | undefined>;
+  getMobileUserByPhone(phoneNumber: string): Promise<MobileUser | undefined>;
+  createMobileUser(user: InsertMobileUser): Promise<MobileUser>;
+  updateMobileUser(id: number, user: Partial<MobileUser>): Promise<MobileUser | undefined>;
+  getMobileUsersByDistrict(district: string): Promise<MobileUser[]>;
+  getActiveMobileUsers(): Promise<MobileUser[]>;
+
+  // Emergency Alerts
+  getAllEmergencyAlerts(): Promise<EmergencyAlert[]>;
+  getEmergencyAlert(id: number): Promise<EmergencyAlert | undefined>;
+  createEmergencyAlert(alert: InsertEmergencyAlert): Promise<EmergencyAlert>;
+  updateEmergencyAlert(id: number, alert: Partial<EmergencyAlert>): Promise<EmergencyAlert | undefined>;
+  getActiveAlerts(): Promise<EmergencyAlert[]>;
+  getAlertsByDistrict(district: string): Promise<EmergencyAlert[]>;
+
+  // User Locations
+  getAllUserLocations(): Promise<UserLocation[]>;
+  getUserLocation(id: number): Promise<UserLocation | undefined>;
+  createUserLocation(location: InsertUserLocation): Promise<UserLocation>;
+  getLocationsByUser(mobileUserId: number): Promise<UserLocation[]>;
+  getEmergencyLocations(): Promise<UserLocation[]>;
+  getLocationsByDistrict(district: string): Promise<UserLocation[]>;
+  getRecentLocations(hours: number): Promise<UserLocation[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -89,6 +117,12 @@ export class MemStorage implements IStorage {
   private currentWeatherId: number;
   private currentContainerId: number;
   private currentCityId: number;
+  private mobileUsers: Map<number, MobileUser>;
+  private emergencyAlerts: Map<number, EmergencyAlert>;
+  private userLocations: Map<number, UserLocation>;
+  private currentMobileUserId: number;
+  private currentAlertId: number;
+  private currentLocationId: number;
 
   constructor() {
     this.users = new Map();
@@ -109,6 +143,12 @@ export class MemStorage implements IStorage {
     this.currentWeatherId = 1;
     this.currentContainerId = 1;
     this.currentCityId = 1;
+    this.mobileUsers = new Map();
+    this.emergencyAlerts = new Map();
+    this.userLocations = new Map();
+    this.currentMobileUserId = 1;
+    this.currentAlertId = 1;
+    this.currentLocationId = 1;
 
     this.initializeData();
   }
@@ -822,6 +862,329 @@ export class DatabaseStorage implements IStorage {
     const [city] = await db.select().from(cityManagement).where(eq(cityManagement.district, district));
     return city || undefined;
   }
+
+  // Mobile Users Implementation for MemStorage
+  async getAllMobileUsers(): Promise<MobileUser[]> {
+    return Array.from(this.mobileUsers.values());
+  }
+
+  async getMobileUser(id: number): Promise<MobileUser | undefined> {
+    return this.mobileUsers.get(id);
+  }
+
+  async getMobileUserByPhone(phoneNumber: string): Promise<MobileUser | undefined> {
+    const users = Array.from(this.mobileUsers.values());
+    return users.find(user => user.phoneNumber === phoneNumber);
+  }
+
+  async createMobileUser(insertUser: InsertMobileUser): Promise<MobileUser> {
+    const id = this.currentMobileUserId++;
+    const user: MobileUser = {
+      ...insertUser,
+      id,
+      registeredAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    this.mobileUsers.set(id, user);
+    return user;
+  }
+
+  async updateMobileUser(id: number, updates: Partial<MobileUser>): Promise<MobileUser | undefined> {
+    const user = this.mobileUsers.get(id);
+    if (!user) return undefined;
+    
+    const updatedUser = { ...user, ...updates, updatedAt: new Date().toISOString() };
+    this.mobileUsers.set(id, updatedUser);
+    return updatedUser;
+  }
+
+  async getMobileUsersByDistrict(district: string): Promise<MobileUser[]> {
+    const users = Array.from(this.mobileUsers.values());
+    return users.filter(user => user.district === district);
+  }
+
+  async getActiveMobileUsers(): Promise<MobileUser[]> {
+    const users = Array.from(this.mobileUsers.values());
+    return users.filter(user => user.isActive);
+  }
+
+  // Emergency Alerts Implementation
+  async getAllEmergencyAlerts(): Promise<EmergencyAlert[]> {
+    return Array.from(this.emergencyAlerts.values());
+  }
+
+  async getEmergencyAlert(id: number): Promise<EmergencyAlert | undefined> {
+    return this.emergencyAlerts.get(id);
+  }
+
+  async createEmergencyAlert(insertAlert: InsertEmergencyAlert): Promise<EmergencyAlert> {
+    const id = this.currentAlertId++;
+    const alert: EmergencyAlert = {
+      ...insertAlert,
+      id,
+      sentAt: new Date().toISOString(),
+    };
+    this.emergencyAlerts.set(id, alert);
+    return alert;
+  }
+
+  async updateEmergencyAlert(id: number, updates: Partial<EmergencyAlert>): Promise<EmergencyAlert | undefined> {
+    const alert = this.emergencyAlerts.get(id);
+    if (!alert) return undefined;
+    
+    const updatedAlert = { ...alert, ...updates };
+    this.emergencyAlerts.set(id, updatedAlert);
+    return updatedAlert;
+  }
+
+  async getActiveAlerts(): Promise<EmergencyAlert[]> {
+    const alerts = Array.from(this.emergencyAlerts.values());
+    return alerts.filter(alert => alert.isActive);
+  }
+
+  async getAlertsByDistrict(district: string): Promise<EmergencyAlert[]> {
+    const alerts = Array.from(this.emergencyAlerts.values());
+    return alerts.filter(alert => alert.targetDistricts.includes(district));
+  }
+
+  // User Locations Implementation
+  async getAllUserLocations(): Promise<UserLocation[]> {
+    return Array.from(this.userLocations.values());
+  }
+
+  async getUserLocation(id: number): Promise<UserLocation | undefined> {
+    return this.userLocations.get(id);
+  }
+
+  async createUserLocation(insertLocation: InsertUserLocation): Promise<UserLocation> {
+    const id = this.currentLocationId++;
+    const location: UserLocation = {
+      ...insertLocation,
+      id,
+      reportedAt: new Date().toISOString(),
+    };
+    this.userLocations.set(id, location);
+    return location;
+  }
+
+  async getLocationsByUser(mobileUserId: number): Promise<UserLocation[]> {
+    const locations = Array.from(this.userLocations.values());
+    return locations.filter(location => location.mobileUserId === mobileUserId);
+  }
+
+  async getEmergencyLocations(): Promise<UserLocation[]> {
+    const locations = Array.from(this.userLocations.values());
+    return locations.filter(location => location.isEmergencyLocation);
+  }
+
+  async getLocationsByDistrict(district: string): Promise<UserLocation[]> {
+    const locations = Array.from(this.userLocations.values());
+    return locations.filter(location => location.district === district);
+  }
+
+  async getRecentLocations(hours: number): Promise<UserLocation[]> {
+    const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    const locations = Array.from(this.userLocations.values());
+    return locations.filter(location => new Date(location.reportedAt) > cutoffTime);
+  }
+
+  private initializeMobileUsersData() {
+    // Sample mobile users
+    const sampleMobileUser1: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 123 4567",
+      name: "Ahmet Yılmaz",
+      district: "Beşiktaş",
+      latitude: "41.0428",
+      longitude: "29.0044",
+      lastLocationUpdate: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 987 6543",
+      medicalInfo: "Diyabet",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const sampleMobileUser2: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 234 5678",
+      name: "Fatma Özkan",
+      district: "Kadıköy",
+      latitude: "40.9833",
+      longitude: "29.0333",
+      lastLocationUpdate: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 876 5432",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const sampleMobileUser3: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 345 6789",
+      name: "Mehmet Demir",
+      district: "Bakırköy",
+      latitude: "40.9833",
+      longitude: "28.8667",
+      lastLocationUpdate: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 765 4321",
+      medicalInfo: "Kalp hastası",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.mobileUsers.set(1, sampleMobileUser1);
+    this.mobileUsers.set(2, sampleMobileUser2);
+    this.mobileUsers.set(3, sampleMobileUser3);
+
+    // Sample user locations
+    const sampleLocation1: UserLocation = {
+      id: this.currentLocationId++,
+      mobileUserId: 1,
+      latitude: "41.0428",
+      longitude: "29.0044",
+      address: "Barbaros Bulvarı No:142, Beşiktaş",
+      district: "Beşiktaş",
+      isEmergencyLocation: true,
+      reportedAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+      accuracy: "5",
+      batteryLevel: 78,
+      status: "help_needed"
+    };
+
+    const sampleLocation2: UserLocation = {
+      id: this.currentLocationId++,
+      mobileUserId: 2,
+      latitude: "40.9833",
+      longitude: "29.0333",
+      address: "Moda Caddesi No:45, Kadıköy",
+      district: "Kadıköy",
+      isEmergencyLocation: false,
+      reportedAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      accuracy: "3",
+      batteryLevel: 92,
+      status: "safe"
+    };
+
+    this.userLocations.set(1, sampleLocation1);
+    this.userLocations.set(2, sampleLocation2);
+
+    // Sample emergency alert
+    const sampleAlert: EmergencyAlert = {
+      id: this.currentAlertId++,
+      title: "Bölgesel Tahliye Uyarısı",
+      message: "Beşiktaş bölgesinde yangın nedeniyle acil tahliye gerekiyor. En yakın güvenli alana gidiniz.",
+      alertType: "evacuation",
+      targetDistricts: ["Beşiktaş", "Ortaköy"],
+      severity: "critical",
+      sentBy: 1,
+      sentAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
+      isActive: true
+    };
+
+    this.emergencyAlerts.set(1, sampleAlert);
+  }
+
+  private initializeMobileUsersData() {
+    // Sample mobile users
+    const sampleMobileUser1: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 123 4567",
+      name: "Ahmet Yılmaz",
+      district: "Beşiktaş",
+      latitude: "41.0428",
+      longitude: "29.0044",
+      lastLocationUpdate: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 987 6543",
+      medicalInfo: "Diyabet",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const sampleMobileUser2: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 234 5678",
+      name: "Fatma Özkan",
+      district: "Kadıköy",
+      latitude: "40.9833",
+      longitude: "29.0333",
+      lastLocationUpdate: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 876 5432",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const sampleMobileUser3: MobileUser = {
+      id: this.currentMobileUserId++,
+      phoneNumber: "+90 555 345 6789",
+      name: "Mehmet Demir",
+      district: "Bakırköy",
+      latitude: "40.9833",
+      longitude: "28.8667",
+      lastLocationUpdate: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      emergencyContact: "+90 555 765 4321",
+      medicalInfo: "Kalp hastası",
+      isActive: true,
+      registeredAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.mobileUsers.set(1, sampleMobileUser1);
+    this.mobileUsers.set(2, sampleMobileUser2);
+    this.mobileUsers.set(3, sampleMobileUser3);
+
+    // Sample user locations
+    const sampleLocation1: UserLocation = {
+      id: this.currentLocationId++,
+      mobileUserId: 1,
+      latitude: "41.0428",
+      longitude: "29.0044",
+      address: "Barbaros Bulvarı No:142, Beşiktaş",
+      district: "Beşiktaş",
+      isEmergencyLocation: true,
+      reportedAt: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+      accuracy: "5",
+      batteryLevel: 78,
+      status: "help_needed"
+    };
+
+    const sampleLocation2: UserLocation = {
+      id: this.currentLocationId++,
+      mobileUserId: 2,
+      latitude: "40.9833",
+      longitude: "29.0333",
+      address: "Moda Caddesi No:45, Kadıköy",
+      district: "Kadıköy",
+      isEmergencyLocation: false,
+      reportedAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      accuracy: "3",
+      batteryLevel: 92,
+      status: "safe"
+    };
+
+    this.userLocations.set(1, sampleLocation1);
+    this.userLocations.set(2, sampleLocation2);
+
+    // Sample emergency alert
+    const sampleAlert: EmergencyAlert = {
+      id: this.currentAlertId++,
+      title: "Bölgesel Tahliye Uyarısı",
+      message: "Beşiktaş bölgesinde yangın nedeniyle acil tahliye gerekiyor. En yakın güvenli alana gidiniz.",
+      alertType: "evacuation",
+      targetDistricts: ["Beşiktaş", "Ortaköy"],
+      severity: "critical",
+      sentBy: 1,
+      sentAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
+      isActive: true
+    };
+
+    this.emergencyAlerts.set(1, sampleAlert);
+  }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new MemStorage();

@@ -106,6 +106,8 @@ This is an emergency coordination dashboard system built with React, Express, Ty
 - June 24, 2025. Added PostgreSQL database integration with comprehensive data models
 - June 24, 2025. Enhanced system with supplier mapping, earthquake monitoring, weather tracking, container management, and city management modules
 - June 24, 2025. Migrated from in-memory storage to persistent PostgreSQL database with Drizzle ORM
+- June 24, 2025. Added mobile user management system with location tracking and emergency alerts
+- June 24, 2025. Enhanced sidebar navigation with collapsible design, search functionality, and keyboard shortcuts
 
 ## User Preferences
 

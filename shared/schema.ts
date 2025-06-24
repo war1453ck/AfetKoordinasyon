@@ -26,6 +26,51 @@ export const incidents = pgTable("incidents", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Mobile Users Table
+export const mobileUsers = pgTable("mobile_users", {
+  id: serial("id").primaryKey(),
+  phoneNumber: text("phone_number").notNull().unique(),
+  name: text("name").notNull(),
+  district: text("district").notNull(),
+  latitude: text("latitude"),
+  longitude: text("longitude"),
+  lastLocationUpdate: timestamp("last_location_update"),
+  emergencyContact: text("emergency_contact"),
+  medicalInfo: text("medical_info"),
+  isActive: boolean("is_active").default(true),
+  registeredAt: timestamp("registered_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Emergency Alerts Table
+export const emergencyAlerts = pgTable("emergency_alerts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  alertType: text("alert_type").notNull(), // "evacuation", "shelter", "info", "warning"
+  targetDistricts: text("target_districts").array().notNull(),
+  severity: text("severity").notNull(), // "low", "medium", "high", "critical"
+  sentBy: integer("sent_by").references(() => users.id),
+  sentAt: timestamp("sent_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+  isActive: boolean("is_active").default(true),
+});
+
+// User Locations Table (for tracking during emergencies)
+export const userLocations = pgTable("user_locations", {
+  id: serial("id").primaryKey(),
+  mobileUserId: integer("mobile_user_id").references(() => mobileUsers.id),
+  latitude: text("latitude").notNull(),
+  longitude: text("longitude").notNull(),
+  address: text("address"),
+  district: text("district").notNull(),
+  isEmergencyLocation: boolean("is_emergency_location").default(false),
+  reportedAt: timestamp("reported_at").defaultNow().notNull(),
+  accuracy: text("accuracy"), // GPS accuracy in meters
+  batteryLevel: integer("battery_level"), // Device battery level
+  status: text("status").default("safe"), // "safe", "help_needed", "injured", "trapped"
+});
+
 export const resources = pgTable("resources", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -164,7 +209,23 @@ export const insertContainerSchema = createInsertSchema(containers).omit({
 export const insertCityManagementSchema = createInsertSchema(cityManagement).omit({
   id: true,
   createdAt: true,
-  lastUpdate: true,
+  updatedAt: true,
+});
+
+export const insertMobileUserSchema = createInsertSchema(mobileUsers).omit({
+  id: true,
+  registeredAt: true,
+  updatedAt: true,
+});
+
+export const insertEmergencyAlertSchema = createInsertSchema(emergencyAlerts).omit({
+  id: true,
+  sentAt: true,
+});
+
+export const insertUserLocationSchema = createInsertSchema(userLocations).omit({
+  id: true,
+  reportedAt: true,
 });
 
 // Types
@@ -194,3 +255,12 @@ export type InsertContainer = z.infer<typeof insertContainerSchema>;
 
 export type CityManagement = typeof cityManagement.$inferSelect;
 export type InsertCityManagement = z.infer<typeof insertCityManagementSchema>;
+
+export type MobileUser = typeof mobileUsers.$inferSelect;
+export type InsertMobileUser = z.infer<typeof insertMobileUserSchema>;
+
+export type EmergencyAlert = typeof emergencyAlerts.$inferSelect;
+export type InsertEmergencyAlert = z.infer<typeof insertEmergencyAlertSchema>;
+
+export type UserLocation = typeof userLocations.$inferSelect;
+export type InsertUserLocation = z.infer<typeof insertUserLocationSchema>;
