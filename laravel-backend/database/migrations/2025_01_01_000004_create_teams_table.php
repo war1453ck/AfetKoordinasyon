@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('location');
             $table->integer('member_count');
             $table->json('specialties');
-            $table->foreignId('leader_id')->nullable()->constrained('users');
+            $table->unsignedBigInteger('leader_id')->nullable();
             $table->timestamp('last_deployment')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

@@ -6,26 +6,22 @@ This is an emergency coordination dashboard system built with React, Express, Ty
 
 ## System Architecture
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **UI Library**: Shadcn/ui components with Radix UI primitives
-- **Styling**: Tailwind CSS with custom emergency theme colors
-- **State Management**: TanStack Query for server state management
-- **Routing**: Wouter for client-side routing
-- **Build Tool**: Vite for development and bundling
-
-### Backend Architecture
-- **Framework**: Laravel 10 with PHP 8.2
+### Architecture
+- **Framework**: Laravel 10 with PHP 8.2 (Full-Stack)
+- **Frontend**: Blade Templates with Tailwind CSS & Alpine.js
 - **Database**: PostgreSQL with Eloquent ORM
-- **API**: RESTful endpoints for dashboard stats, incidents, resources, and teams
-- **Development Server**: Laravel Artisan serve on port 8000
-- **Previous Stack**: Express.js + TypeScript (migrated to Laravel)
+- **Styling**: Tailwind CSS with emergency response theme
+- **JavaScript**: Alpine.js for interactive components
+- **Development Server**: Laravel Artisan serve on port 5000
+- **Previous Stack**: React + Express.js (completely replaced)
 
 ### Project Structure
-- `client/` - React frontend application
-- `server/` - Express.js backend API
-- `shared/` - Shared TypeScript types and database schema
-- `migrations/` - Database migration files
+- `laravel-backend/` - Complete Laravel application
+- `resources/views/` - Blade templates
+- `app/Models/` - Eloquent models
+- `app/Http/Controllers/` - Laravel controllers
+- `database/migrations/` - Database migration files
+- `routes/web.php` - Web routes
 
 ## Key Components
 
@@ -115,6 +111,9 @@ This is an emergency coordination dashboard system built with React, Express, Ty
 - June 24, 2025. **MAJOR MIGRATION**: Migrated backend from Express.js/TypeScript to Laravel/PHP
 - June 24, 2025. Implemented Laravel API with Eloquent models for all core entities
 - June 24, 2025. Maintained React frontend, updated API calls to Laravel endpoints
+- June 24, 2025. **COMPLETE REBUILD**: Replaced React frontend with Laravel Blade templates
+- June 24, 2025. Created full-stack Laravel application with Tailwind CSS and Alpine.js
+- June 24, 2025. Implemented dashboard, incident management, and navigation system
 
 ## User Preferences
 

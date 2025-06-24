@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->foreignId('reported_by')->constrained('users');
-            $table->foreignId('assigned_team_id')->nullable()->constrained('teams');
+            $table->unsignedBigInteger('assigned_team_id')->nullable();
             $table->timestamp('reported_at');
             $table->timestamp('resolved_at')->nullable();
             $table->text('resolution_notes')->nullable();
