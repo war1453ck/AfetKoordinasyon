@@ -277,11 +277,11 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-4">
+        <nav className="flex-1 overflow-y-auto p-3 space-y-3">
           {filteredCategories.map((category, categoryIndex) => (
-            <div key={category.category} className="space-y-2">
+            <div key={category.category} className="space-y-1">
               {!isCollapsed && (
-                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-2 mb-2">
+                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-2 mb-1">
                   {category.category}
                 </h4>
               )}
@@ -301,7 +301,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
                             : 'text-slate-300 hover:text-white hover:bg-slate-700'
                           } 
                           ${item.urgent ? 'animate-pulse' : ''} 
-                          transition-all duration-200 h-10`}
+                          transition-all duration-200 h-9`}
                         onClick={() => handleNavigation(item.id)}
                       >
                         <div className="relative flex items-center">
@@ -353,7 +353,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
               </div>
               
               {categoryIndex < filteredCategories.length - 1 && !isCollapsed && (
-                <Separator className="my-3 bg-slate-700" />
+                <Separator className="my-2 bg-slate-700" />
               )}
             </div>
           ))}

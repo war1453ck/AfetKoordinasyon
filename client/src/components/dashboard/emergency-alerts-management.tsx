@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { 
   MessageSquare, 
   AlertTriangle, 
@@ -141,6 +141,9 @@ export default function EmergencyAlertsManagement() {
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
                   <DialogTitle>Acil Durum Uyarısı Oluştur</DialogTitle>
+                  <DialogDescription>
+                    Vatandaşlara gönderilecek acil durum uyarısını oluşturun.
+                  </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
