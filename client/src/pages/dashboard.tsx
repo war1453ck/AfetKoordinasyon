@@ -7,6 +7,11 @@ import ResourceManagement from "@/components/dashboard/resource-management";
 import TeamCoordination from "@/components/dashboard/team-coordination";
 import QuickActions from "@/components/dashboard/quick-actions";
 import EmergencyReportModal from "@/components/dashboard/emergency-report-modal";
+import SuppliersMap from "@/components/dashboard/suppliers-map";
+import EarthquakeMonitor from "@/components/dashboard/earthquake-monitor";
+import WeatherMonitor from "@/components/dashboard/weather-monitor";
+import ContainerManagement from "@/components/dashboard/container-management";
+import CityManagement from "@/components/dashboard/city-management";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -34,6 +39,17 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <ResourceManagement />
             <TeamCoordination />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <EarthquakeMonitor />
+            <WeatherMonitor />
+            <SuppliersMap />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <ContainerManagement />
+            <CityManagement />
           </div>
 
           <QuickActions />

@@ -7,15 +7,25 @@ import {
   Users, 
   MessageSquare, 
   BarChart, 
-  Settings 
+  Settings,
+  Package,
+  Activity,
+  Cloud,
+  Container,
+  Building
 } from "lucide-react";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: BarChart3, current: true },
   { name: "Harita Görünümü", href: "#", icon: Map, current: false },
-  { name: "Aktif Olaylar", href: "#", icon: AlertTriangle, current: false, badge: 12 },
+  { name: "Aktif Olaylar", href: "#", icon: AlertTriangle, current: false, badge: 4 },
   { name: "Kaynak Yönetimi", href: "#", icon: Truck, current: false },
   { name: "Ekip Koordinasyonu", href: "#", icon: Users, current: false },
+  { name: "Tedarikçi Haritası", href: "#", icon: Package, current: false },
+  { name: "Deprem Takip", href: "#", icon: Activity, current: false },
+  { name: "Hava Durumu", href: "#", icon: Cloud, current: false },
+  { name: "Konteyner Kent", href: "#", icon: Package, current: false },
+  { name: "Kent Yönetimi", href: "#", icon: Building, current: false },
   { name: "İletişim Merkezi", href: "#", icon: MessageSquare, current: false, badge: 3 },
   { name: "Raporlar", href: "#", icon: BarChart, current: false },
   { name: "Ayarlar", href: "#", icon: Settings, current: false },

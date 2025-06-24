@@ -1,4 +1,10 @@
-import { users, incidents, resources, teams, type User, type InsertUser, type Incident, type InsertIncident, type Resource, type InsertResource, type Team, type InsertTeam } from "@shared/schema";
+import { 
+  users, incidents, resources, teams, suppliers, earthquakes, weatherData, containers, cityManagement,
+  type User, type InsertUser, type Incident, type InsertIncident, type Resource, type InsertResource, 
+  type Team, type InsertTeam, type Supplier, type InsertSupplier, type Earthquake, type InsertEarthquake,
+  type WeatherData, type InsertWeatherData, type Container, type InsertContainer, 
+  type CityManagement, type InsertCityManagement 
+} from "@shared/schema";
 
 export interface IStorage {
   // Users
@@ -26,6 +32,40 @@ export interface IStorage {
   createTeam(team: InsertTeam): Promise<Team>;
   updateTeam(id: number, team: Partial<Team>): Promise<Team | undefined>;
   getActiveTeams(): Promise<Team[]>;
+
+  // Suppliers
+  getAllSuppliers(): Promise<Supplier[]>;
+  getSupplier(id: number): Promise<Supplier | undefined>;
+  createSupplier(supplier: InsertSupplier): Promise<Supplier>;
+  updateSupplier(id: number, supplier: Partial<Supplier>): Promise<Supplier | undefined>;
+  getSuppliersByType(type: string): Promise<Supplier[]>;
+
+  // Earthquakes
+  getAllEarthquakes(): Promise<Earthquake[]>;
+  getEarthquake(id: number): Promise<Earthquake | undefined>;
+  createEarthquake(earthquake: InsertEarthquake): Promise<Earthquake>;
+  getRecentEarthquakes(hours: number): Promise<Earthquake[]>;
+
+  // Weather Data
+  getAllWeatherData(): Promise<WeatherData[]>;
+  getWeatherData(id: number): Promise<WeatherData | undefined>;
+  createWeatherData(weather: InsertWeatherData): Promise<WeatherData>;
+  getCurrentWeather(location: string): Promise<WeatherData | undefined>;
+
+  // Containers
+  getAllContainers(): Promise<Container[]>;
+  getContainer(id: number): Promise<Container | undefined>;
+  createContainer(container: InsertContainer): Promise<Container>;
+  updateContainer(id: number, container: Partial<Container>): Promise<Container | undefined>;
+  getContainersByType(type: string): Promise<Container[]>;
+  getAvailableContainers(): Promise<Container[]>;
+
+  // City Management
+  getAllCityManagement(): Promise<CityManagement[]>;
+  getCityManagement(id: number): Promise<CityManagement | undefined>;
+  createCityManagement(city: InsertCityManagement): Promise<CityManagement>;
+  updateCityManagement(id: number, city: Partial<CityManagement>): Promise<CityManagement | undefined>;
+  getCityByDistrict(district: string): Promise<CityManagement | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -33,20 +73,40 @@ export class MemStorage implements IStorage {
   private incidents: Map<number, Incident>;
   private resources: Map<number, Resource>;
   private teams: Map<number, Team>;
+  private suppliers: Map<number, Supplier>;
+  private earthquakes: Map<number, Earthquake>;
+  private weatherData: Map<number, WeatherData>;
+  private containers: Map<number, Container>;
+  private cityManagement: Map<number, CityManagement>;
   private currentUserId: number;
   private currentIncidentId: number;
   private currentResourceId: number;
   private currentTeamId: number;
+  private currentSupplierId: number;
+  private currentEarthquakeId: number;
+  private currentWeatherId: number;
+  private currentContainerId: number;
+  private currentCityId: number;
 
   constructor() {
     this.users = new Map();
     this.incidents = new Map();
     this.resources = new Map();
     this.teams = new Map();
+    this.suppliers = new Map();
+    this.earthquakes = new Map();
+    this.weatherData = new Map();
+    this.containers = new Map();
+    this.cityManagement = new Map();
     this.currentUserId = 1;
     this.currentIncidentId = 1;
     this.currentResourceId = 1;
     this.currentTeamId = 1;
+    this.currentSupplierId = 1;
+    this.currentEarthquakeId = 1;
+    this.currentWeatherId = 1;
+    this.currentContainerId = 1;
+    this.currentCityId = 1;
 
     this.initializeData();
   }
@@ -159,6 +219,69 @@ export class MemStorage implements IStorage {
       this.teams.set(team.id, team);
     });
     this.currentTeamId = 5;
+
+    // Sample suppliers
+    const sampleSuppliers: Supplier[] = [
+      { id: 1, name: "Metro Gıda Tedarik", type: "food", contactPerson: "Ahmet Kaya", phone: "+90 212 555 1001", email: "ahmet@metrogida.com", address: "Maslak Mah. Büyükdere Cad. No:123", latitude: "41.1086", longitude: "29.0119", capacity: 5000, status: "active", createdAt: new Date() },
+      { id: 2, name: "Sağlık Malzeme AŞ", type: "medical", contactPerson: "Dr. Fatma Özkan", phone: "+90 212 555 2002", email: "fatma@saglikmalzeme.com", address: "Şişli İş Merkezi A Blok", latitude: "41.0609", longitude: "28.9837", capacity: 2000, status: "active", createdAt: new Date() },
+      { id: 3, name: "Acil Barınak Sistemleri", type: "shelter", contactPerson: "Mehmet Demir", phone: "+90 212 555 3003", email: "mehmet@acilbarinak.com", address: "Zeytinburnu Sanayi Sitesi", latitude: "40.9897", longitude: "28.9037", capacity: 1000, status: "active", createdAt: new Date() },
+      { id: 4, name: "Türkiye Petrolleri", type: "fuel", contactPerson: "Selim Yılmaz", phone: "+90 212 555 4004", email: "selim@tpetrol.com", address: "4.Levent Plaza", latitude: "41.0851", longitude: "29.0069", capacity: 10000, status: "active", createdAt: new Date() },
+    ];
+
+    sampleSuppliers.forEach(supplier => {
+      this.suppliers.set(supplier.id, supplier);
+    });
+    this.currentSupplierId = 5;
+
+    // Sample earthquakes (recent AFAD data simulation)
+    const sampleEarthquakes: Earthquake[] = [
+      { id: 1, magnitude: "4.2", depth: "8.5", location: "Marmara Denizi", latitude: "40.7614", longitude: "28.9744", timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), source: "AFAD", createdAt: new Date() },
+      { id: 2, magnitude: "3.8", depth: "12.3", location: "Çanakkale - Ayvacık", latitude: "39.6043", longitude: "26.3978", timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000), source: "AFAD", createdAt: new Date() },
+      { id: 3, magnitude: "2.9", depth: "6.1", location: "Bursa - Mudanya", latitude: "40.3765", longitude: "28.8826", timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000), source: "AFAD", createdAt: new Date() },
+    ];
+
+    sampleEarthquakes.forEach(earthquake => {
+      this.earthquakes.set(earthquake.id, earthquake);
+    });
+    this.currentEarthquakeId = 4;
+
+    // Sample weather data
+    const sampleWeatherData: WeatherData[] = [
+      { id: 1, location: "İstanbul Merkez", latitude: "41.0082", longitude: "28.9784", temperature: "15.2", humidity: 78, windSpeed: "12.5", windDirection: 245, pressure: "1013.25", condition: "cloudy", visibility: "8.5", timestamp: new Date(), createdAt: new Date() },
+      { id: 2, location: "Ankara", latitude: "39.9334", longitude: "32.8597", temperature: "8.7", humidity: 65, windSpeed: "8.2", windDirection: 180, pressure: "1015.80", condition: "sunny", visibility: "12.0", timestamp: new Date(), createdAt: new Date() },
+      { id: 3, location: "İzmir", latitude: "38.4237", longitude: "27.1428", temperature: "18.9", humidity: 82, windSpeed: "15.3", windDirection: 290, pressure: "1011.45", condition: "rainy", visibility: "6.2", timestamp: new Date(), createdAt: new Date() },
+    ];
+
+    sampleWeatherData.forEach(weather => {
+      this.weatherData.set(weather.id, weather);
+    });
+    this.currentWeatherId = 4;
+
+    // Sample containers
+    const sampleContainers: Container[] = [
+      { id: 1, containerNumber: "HSG-001", type: "housing", capacity: 4, currentOccupancy: 0, location: "Zeytinburnu Geçici Yerleşim", latitude: "40.9897", longitude: "28.9037", status: "available", assignedIncident: null, facilities: ["electricity", "water", "heating"], createdAt: new Date() },
+      { id: 2, containerNumber: "MED-001", type: "medical", capacity: 1, currentOccupancy: 0, location: "Bakırköy Sağlık Kampüsü", latitude: "40.9833", longitude: "28.8667", status: "available", assignedIncident: null, facilities: ["electricity", "water", "medical_equipment"], createdAt: new Date() },
+      { id: 3, containerNumber: "STG-001", type: "storage", capacity: 100, currentOccupancy: 45, location: "Hadımköy Lojistik Merkezi", latitude: "41.1970", longitude: "28.6558", status: "occupied", assignedIncident: null, facilities: ["electricity", "security"], createdAt: new Date() },
+      { id: 4, containerNumber: "OFF-001", type: "office", capacity: 8, currentOccupancy: 0, location: "Maslak Koordinasyon Merkezi", latitude: "41.1086", longitude: "29.0119", status: "available", assignedIncident: null, facilities: ["electricity", "water", "internet"], createdAt: new Date() },
+    ];
+
+    sampleContainers.forEach(container => {
+      this.containers.set(container.id, container);
+    });
+    this.currentContainerId = 5;
+
+    // Sample city management data
+    const sampleCityManagement: CityManagement[] = [
+      { id: 1, district: "Beşiktaş", population: 190000, emergencyPersonnel: 85, shelterCapacity: 2500, currentSheltered: 0, availableResources: ["fire_truck", "ambulance", "police_car"], riskLevel: "high", lastUpdate: new Date(), createdAt: new Date() },
+      { id: 2, district: "Bakırköy", population: 220000, emergencyPersonnel: 92, shelterCapacity: 3200, currentSheltered: 12, availableResources: ["ambulance", "police_car"], riskLevel: "medium", lastUpdate: new Date(), createdAt: new Date() },
+      { id: 3, district: "Fatih", population: 430000, emergencyPersonnel: 156, shelterCapacity: 4800, currentSheltered: 8, availableResources: ["fire_truck", "police_car"], riskLevel: "medium", lastUpdate: new Date(), createdAt: new Date() },
+      { id: 4, district: "Kadıköy", population: 467000, emergencyPersonnel: 178, shelterCapacity: 5100, currentSheltered: 0, availableResources: ["ambulance", "helicopter"], riskLevel: "low", lastUpdate: new Date(), createdAt: new Date() },
+    ];
+
+    sampleCityManagement.forEach(city => {
+      this.cityManagement.set(city.id, city);
+    });
+    this.currentCityId = 5;
   }
 
   // User methods
@@ -278,6 +401,165 @@ export class MemStorage implements IStorage {
 
   async getActiveTeams(): Promise<Team[]> {
     return Array.from(this.teams.values()).filter(team => team.status === "active");
+  }
+
+  // Supplier methods
+  async getAllSuppliers(): Promise<Supplier[]> {
+    return Array.from(this.suppliers.values());
+  }
+
+  async getSupplier(id: number): Promise<Supplier | undefined> {
+    return this.suppliers.get(id);
+  }
+
+  async createSupplier(insertSupplier: InsertSupplier): Promise<Supplier> {
+    const id = this.currentSupplierId++;
+    const supplier: Supplier = {
+      ...insertSupplier,
+      id,
+      createdAt: new Date(),
+    };
+    this.suppliers.set(id, supplier);
+    return supplier;
+  }
+
+  async updateSupplier(id: number, updates: Partial<Supplier>): Promise<Supplier | undefined> {
+    const supplier = this.suppliers.get(id);
+    if (!supplier) return undefined;
+
+    const updatedSupplier = { ...supplier, ...updates };
+    this.suppliers.set(id, updatedSupplier);
+    return updatedSupplier;
+  }
+
+  async getSuppliersByType(type: string): Promise<Supplier[]> {
+    return Array.from(this.suppliers.values()).filter(supplier => supplier.type === type);
+  }
+
+  // Earthquake methods
+  async getAllEarthquakes(): Promise<Earthquake[]> {
+    return Array.from(this.earthquakes.values()).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+  }
+
+  async getEarthquake(id: number): Promise<Earthquake | undefined> {
+    return this.earthquakes.get(id);
+  }
+
+  async createEarthquake(insertEarthquake: InsertEarthquake): Promise<Earthquake> {
+    const id = this.currentEarthquakeId++;
+    const earthquake: Earthquake = {
+      ...insertEarthquake,
+      id,
+      createdAt: new Date(),
+    };
+    this.earthquakes.set(id, earthquake);
+    return earthquake;
+  }
+
+  async getRecentEarthquakes(hours: number): Promise<Earthquake[]> {
+    const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    return Array.from(this.earthquakes.values())
+      .filter(earthquake => earthquake.timestamp >= cutoffTime)
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+  }
+
+  // Weather data methods
+  async getAllWeatherData(): Promise<WeatherData[]> {
+    return Array.from(this.weatherData.values()).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+  }
+
+  async getWeatherData(id: number): Promise<WeatherData | undefined> {
+    return this.weatherData.get(id);
+  }
+
+  async createWeatherData(insertWeatherData: InsertWeatherData): Promise<WeatherData> {
+    const id = this.currentWeatherId++;
+    const weather: WeatherData = {
+      ...insertWeatherData,
+      id,
+      createdAt: new Date(),
+    };
+    this.weatherData.set(id, weather);
+    return weather;
+  }
+
+  async getCurrentWeather(location: string): Promise<WeatherData | undefined> {
+    return Array.from(this.weatherData.values())
+      .filter(weather => weather.location.toLowerCase().includes(location.toLowerCase()))
+      .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())[0];
+  }
+
+  // Container methods
+  async getAllContainers(): Promise<Container[]> {
+    return Array.from(this.containers.values());
+  }
+
+  async getContainer(id: number): Promise<Container | undefined> {
+    return this.containers.get(id);
+  }
+
+  async createContainer(insertContainer: InsertContainer): Promise<Container> {
+    const id = this.currentContainerId++;
+    const container: Container = {
+      ...insertContainer,
+      id,
+      createdAt: new Date(),
+    };
+    this.containers.set(id, container);
+    return container;
+  }
+
+  async updateContainer(id: number, updates: Partial<Container>): Promise<Container | undefined> {
+    const container = this.containers.get(id);
+    if (!container) return undefined;
+
+    const updatedContainer = { ...container, ...updates };
+    this.containers.set(id, updatedContainer);
+    return updatedContainer;
+  }
+
+  async getContainersByType(type: string): Promise<Container[]> {
+    return Array.from(this.containers.values()).filter(container => container.type === type);
+  }
+
+  async getAvailableContainers(): Promise<Container[]> {
+    return Array.from(this.containers.values()).filter(container => container.status === "available");
+  }
+
+  // City management methods
+  async getAllCityManagement(): Promise<CityManagement[]> {
+    return Array.from(this.cityManagement.values());
+  }
+
+  async getCityManagement(id: number): Promise<CityManagement | undefined> {
+    return this.cityManagement.get(id);
+  }
+
+  async createCityManagement(insertCityManagement: InsertCityManagement): Promise<CityManagement> {
+    const id = this.currentCityId++;
+    const city: CityManagement = {
+      ...insertCityManagement,
+      id,
+      lastUpdate: new Date(),
+      createdAt: new Date(),
+    };
+    this.cityManagement.set(id, city);
+    return city;
+  }
+
+  async updateCityManagement(id: number, updates: Partial<CityManagement>): Promise<CityManagement | undefined> {
+    const city = this.cityManagement.get(id);
+    if (!city) return undefined;
+
+    const updatedCity = { ...city, ...updates, lastUpdate: new Date() };
+    this.cityManagement.set(id, updatedCity);
+    return updatedCity;
+  }
+
+  async getCityByDistrict(district: string): Promise<CityManagement | undefined> {
+    return Array.from(this.cityManagement.values()).find(city => 
+      city.district.toLowerCase() === district.toLowerCase()
+    );
   }
 }
 
