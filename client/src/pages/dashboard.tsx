@@ -26,6 +26,12 @@ export default function Dashboard() {
     switch(activeView) {
       case "mobile-users":
         return <MobileUsersManagement />;
+      case "emergency-alerts":
+        return <EmergencyAlertsManagement />;
+      case "location-tracking":
+        return <LocationTrackingView />;
+      case "analytics":
+        return <AnalyticsReports />;
       default:
         return (
           <>
@@ -78,7 +84,7 @@ export default function Dashboard() {
       <div className="flex pt-16">
         <ProfessionalSidebar onNavigate={setActiveView} />
         
-        <main className="flex-1 ml-64 overflow-y-auto p-6 space-y-6">
+        <main className="flex-1 ml-0 lg:ml-64 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6 transition-all duration-300">
           {renderMainContent()}
         </main>
       </div>

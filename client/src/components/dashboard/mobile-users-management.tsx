@@ -438,7 +438,7 @@ const mockUserLocations: UserLocation[] = [
       </Card>
 
       {/* Quick Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="responsive-grid">
         <Card className="emergency-card">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">{allUsers.length}</div>

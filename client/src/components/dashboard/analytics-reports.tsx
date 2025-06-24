@@ -115,7 +115,7 @@ export default function AnalyticsReports() {
       </Card>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="responsive-grid">
         <Card className="emergency-card">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">

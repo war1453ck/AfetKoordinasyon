@@ -1,4 +1,4 @@
-import { Bell, Plus, Search, Settings, Shield, User } from "lucide-react";
+import { Bell, Plus, Search, Settings, Shield, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,10 +17,18 @@ interface ModernHeaderProps {
 
 export default function ModernHeader({ onOpenEmergencyReport }: ModernHeaderProps) {
   return (
-    <header className="fixed top-0 right-0 left-64 z-40 professional-header">
+    <header className="fixed top-0 right-0 left-64 lg:left-64 sm:left-16 z-40 professional-header">
       <div className="flex items-center justify-between h-16 px-6">
-        {/* Logo & Brand */}
+        {/* Mobile Menu & Logo */}
         <div className="flex items-center gap-4">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => {/* Mobile menu toggle will be handled via prop */}}
+            className="lg:hidden text-slate-600 hover:text-slate-900"
+          >
+            <Menu className="w-5 h-5" />
+          </Button>
           <div className="flex items-center gap-3">
             <div className="bg-gradient-emergency p-2 rounded-lg">
               <Shield className="w-6 h-6 text-white" />

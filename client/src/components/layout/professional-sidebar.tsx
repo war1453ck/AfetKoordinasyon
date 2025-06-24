@@ -36,6 +36,7 @@ interface ProfessionalSidebarProps {
 export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarProps) {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigationItems = [
@@ -198,13 +199,17 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
   return (
     <>
       {/* Mobile Overlay */}
-      {!isCollapsed && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden" />
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden" 
+          onClick={() => setIsMobileOpen(false)}
+        />
       )}
       
       <aside className={`fixed left-0 top-0 bottom-0 z-50 bg-slate-900 border-r border-slate-700 transition-all duration-300 ${
         isCollapsed ? 'w-16' : 'w-64'
-      } flex flex-col shadow-2xl`}>
+      } ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} 
+      flex flex-col shadow-2xl professional-sidebar`}>
         
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700 bg-slate-800">
@@ -219,14 +224,24 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
               </div>
             )}
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="text-slate-400 hover:text-white hover:bg-slate-700"
-          >
-            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setIsMobileOpen(false)}
+              className="text-slate-400 hover:text-white hover:bg-slate-700 lg:hidden"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="text-slate-400 hover:text-white hover:bg-slate-700 hidden lg:flex"
+            >
+              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            </Button>
+          </div>
         </div>
 
         {/* Search */}
@@ -277,7 +292,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-3 space-y-3">
+        <nav className="flex-1 overflow-y-auto sidebar-nav p-3 space-y-3">
           {filteredCategories.map((category, categoryIndex) => (
             <div key={category.category} className="space-y-1">
               {!isCollapsed && (
