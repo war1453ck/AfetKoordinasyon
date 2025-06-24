@@ -102,7 +102,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
           id: "mobile-users", 
           label: "Mobil Kullanıcılar", 
           icon: Smartphone, 
-          badge: "127", 
+          badge: "3", 
           badgeColor: "bg-purple-500",
           description: "Kayıtlı vatandaş takibi",
           isNew: true
@@ -111,7 +111,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
           id: "emergency-alerts", 
           label: "Acil Uyarılar", 
           icon: MessageSquare, 
-          badge: "2", 
+          badge: "1", 
           badgeColor: "bg-orange-500",
           description: "Toplu bildirim sistemi"
         },
@@ -119,7 +119,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
           id: "location-tracking", 
           label: "Konum Takibi", 
           icon: Map, 
-          badge: "45", 
+          badge: "2", 
           badgeColor: "bg-teal-500",
           description: "Gerçek zamanlı lokasyon"
         },
@@ -203,7 +203,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
       )}
       
       <aside className={`fixed left-0 top-0 bottom-0 z-50 bg-slate-900 border-r border-slate-700 transition-all duration-300 ${
-        isCollapsed ? 'w-16' : 'w-80'
+        isCollapsed ? 'w-16' : 'w-64'
       } flex flex-col shadow-2xl`}>
         
         {/* Header */}
@@ -277,16 +277,16 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-6">
+        <nav className="flex-1 overflow-y-auto p-3 space-y-4">
           {filteredCategories.map((category, categoryIndex) => (
             <div key={category.category} className="space-y-2">
               {!isCollapsed && (
-                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-2 mb-3">
+                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-2 mb-2">
                   {category.category}
                 </h4>
               )}
               
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {category.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeSection === item.id;
@@ -301,11 +301,11 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
                             : 'text-slate-300 hover:text-white hover:bg-slate-700'
                           } 
                           ${item.urgent ? 'animate-pulse' : ''} 
-                          transition-all duration-200 h-12`}
+                          transition-all duration-200 h-10`}
                         onClick={() => handleNavigation(item.id)}
                       >
                         <div className="relative flex items-center">
-                          <Icon className="w-5 h-5" />
+                          <Icon className="w-4 h-4" />
                           {item.urgent && !isActive && (
                             <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
                           )}
@@ -315,20 +315,17 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
                           <>
                             <div className="flex-1 ml-3 text-left">
                               <div className="flex items-center gap-2">
-                                <span className="font-medium">{item.label}</span>
+                                <span className="font-medium text-sm">{item.label}</span>
                                 {item.isNew && (
                                   <Badge className="bg-blue-500 text-white text-xs px-1.5 py-0.5">
                                     YENİ
                                   </Badge>
                                 )}
                               </div>
-                              <div className="text-xs text-slate-400 mt-0.5">
-                                {item.description}
-                              </div>
                             </div>
                             
                             {item.badge && (
-                              <Badge className={`${item.badgeColor || 'bg-slate-600'} text-white ml-2`}>
+                              <Badge className={`${item.badgeColor || 'bg-slate-600'} text-white ml-2 text-xs`}>
                                 {item.badge}
                               </Badge>
                             )}
@@ -356,7 +353,7 @@ export default function ProfessionalSidebar({ onNavigate }: ProfessionalSidebarP
               </div>
               
               {categoryIndex < filteredCategories.length - 1 && !isCollapsed && (
-                <Separator className="my-4 bg-slate-700" />
+                <Separator className="my-3 bg-slate-700" />
               )}
             </div>
           ))}

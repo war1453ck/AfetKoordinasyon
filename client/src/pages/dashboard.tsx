@@ -13,6 +13,9 @@ import WeatherMonitor from "@/components/dashboard/weather-monitor";
 import ContainerManagement from "@/components/dashboard/container-management";
 import CityManagement from "@/components/dashboard/city-management";
 import MobileUsersManagement from "@/components/dashboard/mobile-users-management";
+import EmergencyAlertsManagement from "@/components/dashboard/emergency-alerts-management";
+import LocationTrackingView from "@/components/dashboard/location-tracking-view";
+import AnalyticsReports from "@/components/dashboard/analytics-reports";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -75,7 +78,7 @@ export default function Dashboard() {
       <div className="flex pt-16">
         <ProfessionalSidebar onNavigate={setActiveView} />
         
-        <main className="flex-1 ml-80 overflow-y-auto p-6 space-y-6">
+        <main className="flex-1 ml-64 overflow-y-auto p-6 space-y-6">
           {renderMainContent()}
         </main>
       </div>
