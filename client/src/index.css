@@ -3,81 +3,95 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --background: hsl(210, 20%, 98%);
+  --foreground: hsl(215, 25%, 16%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 47%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --popover-foreground: hsl(215, 25%, 16%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(0, 84.2%, 60.2%);
-  --primary-foreground: hsl(60, 9.1%, 97.8%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
-  --radius: 0.5rem;
+  --card-foreground: hsl(215, 25%, 16%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(215, 25%, 16%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(215, 25%, 16%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(217, 91%, 60%);
+  --radius: 0.75rem;
   
-  /* Emergency theme colors */
-  --emergency: hsl(0, 84.2%, 60.2%);
-  --emergency-foreground: hsl(60, 9.1%, 97.8%);
-  --emergency-50: hsl(0, 85.7%, 97.3%);
-  --emergency-100: hsl(0, 93.3%, 94.1%);
-  --emergency-500: hsl(0, 84.2%, 60.2%);
-  --emergency-600: hsl(0, 72.2%, 50.6%);
-  --emergency-700: hsl(0, 73.7%, 41.8%);
+  /* Modern Emergency System Colors */
+  --emergency-critical: hsl(0, 86%, 65%);
+  --emergency-high: hsl(25, 95%, 60%);
+  --emergency-medium: hsl(42, 87%, 55%);
+  --emergency-low: hsl(142, 71%, 45%);
+  --emergency-monitoring: hsl(217, 91%, 60%);
   
-  --alert: hsl(25, 95%, 53%);
-  --alert-foreground: hsl(60, 9.1%, 97.8%);
-  --alert-50: hsl(33, 100%, 96.5%);
-  --alert-100: hsl(34, 100%, 91.8%);
-  --alert-500: hsl(25, 95%, 53%);
-  --alert-600: hsl(20, 90.6%, 48.2%);
+  /* Status Colors */
+  --status-active: hsl(142, 71%, 45%);
+  --status-pending: hsl(42, 87%, 55%);
+  --status-critical: hsl(0, 86%, 65%);
+  --status-resolved: hsl(142, 71%, 45%);
+  
+  /* System UI Colors */
+  --sidebar-bg: hsl(215, 28%, 17%);
+  --sidebar-hover: hsl(215, 20%, 25%);
+  --header-bg: hsl(0, 0%, 100%);
+  --nav-active: hsl(217, 91%, 60%);
+  
+  /* Glass Effect */
+  --glass-bg: hsla(0, 0%, 100%, 0.8);
+  --glass-border: hsla(255, 255%, 255%, 0.2);
+  
+  /* Shadow System */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(0, 84.2%, 60.2%);
-  --primary-foreground: hsl(60, 9.1%, 97.8%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
-  --radius: 0.5rem;
+  --background: hsl(215, 28%, 9%);
+  --foreground: hsl(213, 31%, 91%);
+  --muted: hsl(215, 28%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(215, 28%, 12%);
+  --popover-foreground: hsl(213, 31%, 91%);
+  --card: hsl(215, 28%, 12%);
+  --card-foreground: hsl(213, 31%, 91%);
+  --border: hsl(215, 28%, 17%);
+  --input: hsl(215, 28%, 17%);
+  --primary: hsl(217, 91%, 60%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(215, 28%, 17%);
+  --secondary-foreground: hsl(213, 31%, 91%);
+  --accent: hsl(215, 28%, 17%);
+  --accent-foreground: hsl(213, 31%, 91%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(217, 91%, 60%);
+  --radius: 0.75rem;
   
-  /* Emergency theme colors for dark mode */
-  --emergency: hsl(0, 84.2%, 60.2%);
-  --emergency-foreground: hsl(60, 9.1%, 97.8%);
-  --emergency-50: hsl(0, 85.7%, 7.3%);
-  --emergency-100: hsl(0, 93.3%, 14.1%);
-  --emergency-500: hsl(0, 84.2%, 60.2%);
-  --emergency-600: hsl(0, 72.2%, 50.6%);
-  --emergency-700: hsl(0, 73.7%, 41.8%);
+  /* Dark Mode Emergency Colors */
+  --emergency-critical: hsl(0, 86%, 65%);
+  --emergency-high: hsl(25, 95%, 60%);
+  --emergency-medium: hsl(42, 87%, 55%);
+  --emergency-low: hsl(142, 71%, 45%);
+  --emergency-monitoring: hsl(217, 91%, 60%);
   
-  --alert: hsl(25, 95%, 53%);
-  --alert-foreground: hsl(60, 9.1%, 97.8%);
-  --alert-50: hsl(33, 100%, 6.5%);
-  --alert-100: hsl(34, 100%, 11.8%);
-  --alert-500: hsl(25, 95%, 53%);
-  --alert-600: hsl(20, 90.6%, 48.2%);
+  /* Dark Mode System UI */
+  --sidebar-bg: hsl(215, 28%, 12%);
+  --sidebar-hover: hsl(215, 28%, 17%);
+  --header-bg: hsl(215, 28%, 12%);
+  --nav-active: hsl(217, 91%, 60%);
+  
+  /* Dark Glass Effect */
+  --glass-bg: hsla(215, 28%, 12%, 0.8);
+  --glass-border: hsla(255, 255%, 255%, 0.1);
 }
 
 @layer base {
@@ -86,81 +100,170 @@
   }
 
   body {
-    @apply font-sans antialiased bg-gray-50 text-foreground;
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Modern Card Components */
+  .emergency-card {
+    @apply bg-card backdrop-blur-lg border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    @apply rounded-xl shadow-xl;
+  }
+  
+  /* Status Indicators */
+  .status-critical {
+    @apply bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800;
+  }
+  
+  .status-high {
+    @apply bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800;
+  }
+  
+  .status-medium {
+    @apply bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800;
+  }
+  
+  .status-low {
+    @apply bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800;
+  }
+  
+  .status-monitoring {
+    @apply bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800;
+  }
+  
+  /* Modern Button Variants */
+  .btn-emergency {
+    @apply bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-action {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar-nav {
+    background: var(--sidebar-bg);
+    @apply border-r border-slate-200 dark:border-slate-700 backdrop-blur-sm;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all duration-200;
+  }
+  
+  .sidebar-item.active {
+    background: var(--nav-active);
+    @apply text-white;
+  }
+  
+  /* Header Styles */
+  .header-glass {
+    background: var(--header-bg);
+    backdrop-filter: blur(12px);
+    @apply border-b border-slate-200 dark:border-slate-700;
   }
 }
 
 @layer utilities {
-  .pulse-red {
-    animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  /* Animation Utilities */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   
-  @keyframes pulse-red {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: .7;
-    }
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
   }
   
-  .text-emergency {
-    color: hsl(var(--emergency));
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
   }
   
-  .bg-emergency {
-    background-color: hsl(var(--emergency));
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
   }
   
-  .bg-emergency-50 {
-    background-color: hsl(var(--emergency-50));
+  /* Priority Colors */
+  .priority-critical {
+    color: var(--emergency-critical);
   }
   
-  .bg-emergency-100 {
-    background-color: hsl(var(--emergency-100));
+  .priority-high {
+    color: var(--emergency-high);
   }
   
-  .text-emergency-500 {
-    color: hsl(var(--emergency-500));
+  .priority-medium {
+    color: var(--emergency-medium);
   }
   
-  .text-emergency-600 {
-    color: hsl(var(--emergency-600));
+  .priority-low {
+    color: var(--emergency-low);
   }
   
-  .bg-emergency-500 {
-    background-color: hsl(var(--emergency-500));
+  .priority-monitoring {
+    color: var(--emergency-monitoring);
   }
   
-  .bg-emergency-600 {
-    background-color: hsl(var(--emergency-600));
+  /* Background Priority Colors */
+  .bg-priority-critical {
+    background-color: var(--emergency-critical);
   }
   
-  .border-emergency-500 {
-    border-color: hsl(var(--emergency-500));
+  .bg-priority-high {
+    background-color: var(--emergency-high);
   }
   
-  .text-alert-500 {
-    color: hsl(var(--alert-500));
+  .bg-priority-medium {
+    background-color: var(--emergency-medium);
   }
   
-  .text-alert-600 {
-    color: hsl(var(--alert-600));
+  .bg-priority-low {
+    background-color: var(--emergency-low);
   }
   
-  .bg-alert-50 {
-    background-color: hsl(var(--alert-50));
+  .bg-priority-monitoring {
+    background-color: var(--emergency-monitoring);
   }
   
-  .bg-alert-100 {
-    background-color: hsl(var(--alert-100));
+  /* Shadow Utilities */
+  .shadow-glass {
+    box-shadow: var(--shadow-lg);
   }
   
-  .bg-alert-500 {
-    background-color: hsl(var(--alert-500));
+  .shadow-soft {
+    box-shadow: var(--shadow-md);
   }
   
-  .border-alert-500 {
-    border-color: hsl(var(--alert-500));
+  /* Gradient Backgrounds */
+  .gradient-emergency {
+    background: linear-gradient(135deg, hsl(var(--emergency-critical)) 0%, hsl(var(--emergency-high)) 100%);
   }
+  
+  .gradient-success {
+    background: linear-gradient(135deg, hsl(var(--emergency-low)) 0%, hsl(142, 71%, 35%) 100%);
+  }
+  
+  .gradient-info {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(217, 91%, 50%) 100%);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

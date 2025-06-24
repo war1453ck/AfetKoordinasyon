@@ -1,11 +1,11 @@
-import Header from "@/components/layout/header";
-import Sidebar from "@/components/layout/sidebar";
-import StatsCards from "@/components/dashboard/stats-cards";
-import MapView from "@/components/dashboard/map-view";
-import ActiveIncidents from "@/components/dashboard/active-incidents";
-import ResourceManagement from "@/components/dashboard/resource-management";
+import ModernHeader from "@/components/layout/modern-header";
+import ModernSidebar from "@/components/layout/modern-sidebar";
+import ModernStatsCards from "@/components/dashboard/modern-stats-cards";
+import ModernMapView from "@/components/dashboard/modern-map-view";
+import ModernActiveIncidents from "@/components/dashboard/modern-active-incidents";
+import ModernResourceManagement from "@/components/dashboard/modern-resource-management";
 import TeamCoordination from "@/components/dashboard/team-coordination";
-import QuickActions from "@/components/dashboard/quick-actions";
+import ModernQuickActions from "@/components/dashboard/modern-quick-actions";
 import EmergencyReportModal from "@/components/dashboard/emergency-report-modal";
 import SuppliersMap from "@/components/dashboard/suppliers-map";
 import EarthquakeMonitor from "@/components/dashboard/earthquake-monitor";
@@ -18,41 +18,50 @@ export default function Dashboard() {
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <Header onOpenEmergencyReport={() => setShowEmergencyModal(true)} />
+    <div className="bg-background min-h-screen">
+      <ModernHeader onOpenEmergencyReport={() => setShowEmergencyModal(true)} />
       
       <div className="flex pt-16">
-        <Sidebar />
+        <ModernSidebar />
         
-        <main className="flex-1 overflow-y-auto p-6">
-          <StatsCards />
+        <main className="flex-1 ml-64 overflow-y-auto p-6 space-y-6">
+          {/* Hero Stats Section */}
+          <div className="animate-fade-in">
+            <ModernStatsCards />
+          </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div className="lg:col-span-2">
-              <MapView />
+          {/* Primary Dashboard Grid */}
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 animate-slide-up">
+            {/* Main Map & Incidents */}
+            <div className="xl:col-span-8 space-y-6">
+              <ModernMapView />
+              
+              {/* Secondary Operations Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <ModernResourceManagement />
+                <TeamCoordination />
+              </div>
             </div>
-            <div>
-              <ActiveIncidents />
+            
+            {/* Side Panel */}
+            <div className="xl:col-span-4 space-y-6">
+              <ModernActiveIncidents />
+              <ModernQuickActions />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <ResourceManagement />
-            <TeamCoordination />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Monitoring Systems Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
             <EarthquakeMonitor />
             <WeatherMonitor />
             <SuppliersMap />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Management Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up">
             <ContainerManagement />
             <CityManagement />
           </div>
-
-          <QuickActions />
         </main>
       </div>
 
