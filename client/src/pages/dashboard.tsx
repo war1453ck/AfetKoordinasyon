@@ -1,5 +1,5 @@
 import ModernHeader from "@/components/layout/modern-header";
-import EnhancedSidebar from "@/components/layout/enhanced-sidebar";
+import ProfessionalSidebar from "@/components/layout/professional-sidebar";
 import ModernStatsCards from "@/components/dashboard/modern-stats-cards";
 import ModernMapView from "@/components/dashboard/modern-map-view";
 import ModernActiveIncidents from "@/components/dashboard/modern-active-incidents";
@@ -73,9 +73,9 @@ export default function Dashboard() {
       <ModernHeader onOpenEmergencyReport={() => setShowEmergencyModal(true)} />
       
       <div className="flex pt-16">
-        <EnhancedSidebar onNavigate={setActiveView} />
+        <ProfessionalSidebar onNavigate={setActiveView} />
         
-        <main className="flex-1 ml-72 overflow-y-auto p-6 space-y-6">
+        <main className="flex-1 ml-80 overflow-y-auto p-6 space-y-6">
           {renderMainContent()}
         </main>
       </div>

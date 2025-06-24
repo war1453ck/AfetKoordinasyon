@@ -147,19 +147,30 @@
     @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200;
   }
   
-  /* Sidebar Styles */
-  .sidebar-nav {
-    background: var(--sidebar-bg);
-    @apply border-r border-slate-200 dark:border-slate-700 backdrop-blur-sm;
+  /* Professional Sidebar Styles */
+  .professional-sidebar {
+    background: linear-gradient(180deg, hsl(215, 28%, 17%) 0%, hsl(215, 25%, 14%) 100%);
+    @apply border-r border-slate-700 shadow-2xl;
   }
   
-  .sidebar-item {
-    @apply flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all duration-200;
+  .sidebar-nav-item {
+    @apply relative flex items-center w-full text-left transition-all duration-200 rounded-lg group;
   }
   
-  .sidebar-item.active {
-    background: var(--nav-active);
-    @apply text-white;
+  .sidebar-nav-item:hover {
+    @apply bg-slate-700 text-white transform scale-[1.02];
+  }
+  
+  .sidebar-nav-item.active {
+    @apply bg-blue-600 text-white shadow-lg;
+  }
+  
+  .sidebar-nav-item.urgent {
+    @apply animate-pulse;
+  }
+  
+  .sidebar-tooltip {
+    @apply absolute left-full ml-3 top-1/2 transform -translate-y-1/2 bg-slate-800 text-white text-sm px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50 border border-slate-600;
   }
   
   /* Header Styles */
@@ -167,6 +178,13 @@
     background: var(--header-bg);
     backdrop-filter: blur(12px);
     @apply border-b border-slate-200 dark:border-slate-700;
+  }
+  
+  /* Professional Header */
+  .professional-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    @apply border-b border-slate-200 shadow-sm;
   }
 }
 

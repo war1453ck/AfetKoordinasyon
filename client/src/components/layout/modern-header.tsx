@@ -17,7 +17,7 @@ interface ModernHeaderProps {
 
 export default function ModernHeader({ onOpenEmergencyReport }: ModernHeaderProps) {
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 header-glass">
+    <header className="fixed top-0 right-0 left-80 z-40 professional-header">
       <div className="flex items-center justify-between h-16 px-6">
         {/* Logo & Brand */}
         <div className="flex items-center gap-4">
