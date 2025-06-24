@@ -147,10 +147,10 @@
     @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200;
   }
   
-  /* Professional Sidebar Styles */
-  .professional-sidebar {
-    background: linear-gradient(180deg, hsl(215, 28%, 17%) 0%, hsl(215, 25%, 14%) 100%);
-    @apply border-r border-slate-700 shadow-2xl;
+  /* Modern Sidebar Styles */
+  .modern-sidebar {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    @apply border-r border-gray-200 shadow-xl;
     overflow: hidden;
   }
   

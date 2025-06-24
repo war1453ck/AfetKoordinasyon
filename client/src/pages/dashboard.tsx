@@ -84,7 +84,7 @@ export default function Dashboard() {
       <div className="flex pt-16">
         <ProfessionalSidebar onNavigate={setActiveView} />
         
-        <main className="flex-1 ml-0 lg:ml-64 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6 transition-all duration-300">
+        <main className="flex-1 ml-0 lg:ml-72 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6 transition-all duration-300">
           {renderMainContent()}
         </main>
       </div>
