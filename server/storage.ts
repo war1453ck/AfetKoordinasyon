@@ -5,6 +5,8 @@ import {
   type WeatherData, type InsertWeatherData, type Container, type InsertContainer, 
   type CityManagement, type InsertCityManagement 
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -563,4 +565,263 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage implementation
+export class DatabaseStorage implements IStorage {
+  // Users
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  // Incidents
+  async getAllIncidents(): Promise<Incident[]> {
+    return await db.select().from(incidents).orderBy(incidents.createdAt);
+  }
+
+  async getIncident(id: number): Promise<Incident | undefined> {
+    const [incident] = await db.select().from(incidents).where(eq(incidents.id, id));
+    return incident || undefined;
+  }
+
+  async createIncident(insertIncident: InsertIncident): Promise<Incident> {
+    const [incident] = await db
+      .insert(incidents)
+      .values(insertIncident)
+      .returning();
+    return incident;
+  }
+
+  async updateIncident(id: number, updates: Partial<Incident>): Promise<Incident | undefined> {
+    const [incident] = await db
+      .update(incidents)
+      .set(updates)
+      .where(eq(incidents.id, id))
+      .returning();
+    return incident || undefined;
+  }
+
+  async getActiveIncidents(): Promise<Incident[]> {
+    return await db.select().from(incidents).where(eq(incidents.status, "active"));
+  }
+
+  // Resources
+  async getAllResources(): Promise<Resource[]> {
+    return await db.select().from(resources);
+  }
+
+  async getResource(id: number): Promise<Resource | undefined> {
+    const [resource] = await db.select().from(resources).where(eq(resources.id, id));
+    return resource || undefined;
+  }
+
+  async createResource(insertResource: InsertResource): Promise<Resource> {
+    const [resource] = await db
+      .insert(resources)
+      .values(insertResource)
+      .returning();
+    return resource;
+  }
+
+  async updateResource(id: number, updates: Partial<Resource>): Promise<Resource | undefined> {
+    const [resource] = await db
+      .update(resources)
+      .set(updates)
+      .where(eq(resources.id, id))
+      .returning();
+    return resource || undefined;
+  }
+
+  async getResourcesByType(type: string): Promise<Resource[]> {
+    return await db.select().from(resources).where(eq(resources.type, type));
+  }
+
+  // Teams
+  async getAllTeams(): Promise<Team[]> {
+    return await db.select().from(teams);
+  }
+
+  async getTeam(id: number): Promise<Team | undefined> {
+    const [team] = await db.select().from(teams).where(eq(teams.id, id));
+    return team || undefined;
+  }
+
+  async createTeam(insertTeam: InsertTeam): Promise<Team> {
+    const [team] = await db
+      .insert(teams)
+      .values(insertTeam)
+      .returning();
+    return team;
+  }
+
+  async updateTeam(id: number, updates: Partial<Team>): Promise<Team | undefined> {
+    const [team] = await db
+      .update(teams)
+      .set(updates)
+      .where(eq(teams.id, id))
+      .returning();
+    return team || undefined;
+  }
+
+  async getActiveTeams(): Promise<Team[]> {
+    return await db.select().from(teams).where(eq(teams.status, "active"));
+  }
+
+  // Suppliers
+  async getAllSuppliers(): Promise<Supplier[]> {
+    return await db.select().from(suppliers);
+  }
+
+  async getSupplier(id: number): Promise<Supplier | undefined> {
+    const [supplier] = await db.select().from(suppliers).where(eq(suppliers.id, id));
+    return supplier || undefined;
+  }
+
+  async createSupplier(insertSupplier: InsertSupplier): Promise<Supplier> {
+    const [supplier] = await db
+      .insert(suppliers)
+      .values(insertSupplier)
+      .returning();
+    return supplier;
+  }
+
+  async updateSupplier(id: number, updates: Partial<Supplier>): Promise<Supplier | undefined> {
+    const [supplier] = await db
+      .update(suppliers)
+      .set(updates)
+      .where(eq(suppliers.id, id))
+      .returning();
+    return supplier || undefined;
+  }
+
+  async getSuppliersByType(type: string): Promise<Supplier[]> {
+    return await db.select().from(suppliers).where(eq(suppliers.type, type));
+  }
+
+  // Earthquakes
+  async getAllEarthquakes(): Promise<Earthquake[]> {
+    return await db.select().from(earthquakes).orderBy(earthquakes.timestamp);
+  }
+
+  async getEarthquake(id: number): Promise<Earthquake | undefined> {
+    const [earthquake] = await db.select().from(earthquakes).where(eq(earthquakes.id, id));
+    return earthquake || undefined;
+  }
+
+  async createEarthquake(insertEarthquake: InsertEarthquake): Promise<Earthquake> {
+    const [earthquake] = await db
+      .insert(earthquakes)
+      .values(insertEarthquake)
+      .returning();
+    return earthquake;
+  }
+
+  async getRecentEarthquakes(hours: number): Promise<Earthquake[]> {
+    const cutoffTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    return await db.select().from(earthquakes).where(eq(earthquakes.timestamp, cutoffTime));
+  }
+
+  // Weather Data
+  async getAllWeatherData(): Promise<WeatherData[]> {
+    return await db.select().from(weatherData).orderBy(weatherData.timestamp);
+  }
+
+  async getWeatherData(id: number): Promise<WeatherData | undefined> {
+    const [weather] = await db.select().from(weatherData).where(eq(weatherData.id, id));
+    return weather || undefined;
+  }
+
+  async createWeatherData(insertWeatherData: InsertWeatherData): Promise<WeatherData> {
+    const [weather] = await db
+      .insert(weatherData)
+      .values(insertWeatherData)
+      .returning();
+    return weather;
+  }
+
+  async getCurrentWeather(location: string): Promise<WeatherData | undefined> {
+    const [weather] = await db.select().from(weatherData).where(eq(weatherData.location, location));
+    return weather || undefined;
+  }
+
+  // Containers
+  async getAllContainers(): Promise<Container[]> {
+    return await db.select().from(containers);
+  }
+
+  async getContainer(id: number): Promise<Container | undefined> {
+    const [container] = await db.select().from(containers).where(eq(containers.id, id));
+    return container || undefined;
+  }
+
+  async createContainer(insertContainer: InsertContainer): Promise<Container> {
+    const [container] = await db
+      .insert(containers)
+      .values(insertContainer)
+      .returning();
+    return container;
+  }
+
+  async updateContainer(id: number, updates: Partial<Container>): Promise<Container | undefined> {
+    const [container] = await db
+      .update(containers)
+      .set(updates)
+      .where(eq(containers.id, id))
+      .returning();
+    return container || undefined;
+  }
+
+  async getContainersByType(type: string): Promise<Container[]> {
+    return await db.select().from(containers).where(eq(containers.type, type));
+  }
+
+  async getAvailableContainers(): Promise<Container[]> {
+    return await db.select().from(containers).where(eq(containers.status, "available"));
+  }
+
+  // City Management
+  async getAllCityManagement(): Promise<CityManagement[]> {
+    return await db.select().from(cityManagement);
+  }
+
+  async getCityManagement(id: number): Promise<CityManagement | undefined> {
+    const [city] = await db.select().from(cityManagement).where(eq(cityManagement.id, id));
+    return city || undefined;
+  }
+
+  async createCityManagement(insertCityManagement: InsertCityManagement): Promise<CityManagement> {
+    const [city] = await db
+      .insert(cityManagement)
+      .values(insertCityManagement)
+      .returning();
+    return city;
+  }
+
+  async updateCityManagement(id: number, updates: Partial<CityManagement>): Promise<CityManagement | undefined> {
+    const [city] = await db
+      .update(cityManagement)
+      .set(updates)
+      .where(eq(cityManagement.id, id))
+      .returning();
+    return city || undefined;
+  }
+
+  async getCityByDistrict(district: string): Promise<CityManagement | undefined> {
+    const [city] = await db.select().from(cityManagement).where(eq(cityManagement.district, district));
+    return city || undefined;
+  }
+}
+
+export const storage = new DatabaseStorage();
