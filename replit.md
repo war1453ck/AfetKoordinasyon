@@ -15,11 +15,11 @@ This is an emergency coordination dashboard system built with React, Express, Ty
 - **Build Tool**: Vite for development and bundling
 
 ### Backend Architecture
-- **Framework**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Database Provider**: Neon Database (serverless PostgreSQL)
+- **Framework**: Laravel 10 with PHP 8.2
+- **Database**: PostgreSQL with Eloquent ORM
 - **API**: RESTful endpoints for dashboard stats, incidents, resources, and teams
-- **Development Server**: Custom Vite integration for full-stack development
+- **Development Server**: Laravel Artisan serve on port 8000
+- **Previous Stack**: Express.js + TypeScript (migrated to Laravel)
 
 ### Project Structure
 - `client/` - React frontend application
@@ -112,6 +112,9 @@ This is an emergency coordination dashboard system built with React, Express, Ty
 - June 24, 2025. Added Emergency Alerts Management system with mass notification capabilities
 - June 24, 2025. Implemented Real-time Location Tracking with interactive map support
 - June 24, 2025. Created comprehensive Analytics & Reports module with performance metrics
+- June 24, 2025. **MAJOR MIGRATION**: Migrated backend from Express.js/TypeScript to Laravel/PHP
+- June 24, 2025. Implemented Laravel API with Eloquent models for all core entities
+- June 24, 2025. Maintained React frontend, updated API calls to Laravel endpoints
 
 ## User Preferences
 
