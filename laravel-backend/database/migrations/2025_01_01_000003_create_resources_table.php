@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('longitude', 11, 8)->nullable();
             $table->integer('capacity');
             $table->text('equipment')->nullable();
-            $table->foreignId('assigned_incident_id')->nullable()->constrained('incidents');
+            $table->unsignedBigInteger('assigned_incident_id')->nullable();
             $table->timestamp('last_maintenance')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
